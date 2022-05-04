@@ -11,10 +11,7 @@
     background-color: lightgray;
     font-size: 3rem;
     font-weight: lighter;
-
-    &:hover {
-      cursor: pointer;
-    }
+    cursor: pointer;
 
     &:nth-child(17) {
       grid-column: 1 / span 2;

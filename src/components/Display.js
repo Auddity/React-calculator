@@ -1,9 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import '../scss/layout/Display.scss';
 
-const Display = () => {
-  const [number, setNumber] = useState(0);
-
+const Display = ({number}) => {
+  
   return (
     <div className="Display">
       {number}
