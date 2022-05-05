@@ -4,42 +4,60 @@ import keyData from './components/oppData';
 import Display from './components/Display';
 import Calc from './components/Calc';
 
-function App() {
-  const start = 0;
-  const [display, setDisplay] = useState(start);
-  let firstNumber;
-  let secondNumber;
-  let operator;
-
-  const handleKey = e => {
-    const targetId = e.target.id;
+let firstNumber, 
+  secondNumber,
+  operator, 
+  prevKey;
+  
+  function App() {
+  
+  const [display, setDisplay] = useState(0);
+  
+  const findMatch = (targetId) => {
     for(let obj of keyData) {
-      const match = obj.id === +targetId;
-
-      if(match && obj.value === 'clear') {
-        clear();
-      }
-
-      if(match && typeof(obj.value) === "number") {
-
-      };
-
-      if(match && obj.type === 'operator') {
-        calculate(firstNumber, secondNumber)
-      }
+      if(obj.id === +targetId) return obj;
     }
   }
+    
+  const handleKeyed = e => {
+    const targetId = e.target.id;
+    
+    let match = findMatch(targetId);
 
-  const calculate = (firstNumber, secondNumber) => {
+    if(match.type === 'operator') {
+      firstNumber = display;
+      operator = match.value;
+      prevKey = match.type;
+    }
+    
+    if(match.type === 'equal') {
+      secondNumber = display;
+      setDisplay(calculate(firstNumber, secondNumber, operator));
+    }
 
-    if(keyData.value === 'add') return firstNumber + secondNumber;
-    if(keyData.value === 'subtract') return firstNumber - secondNumber;
-    if(keyData.value === 'multiply') return firstNumber * secondNumber;
-    if(keyData.value === 'divide') return firstNumber / secondNumber;
+    if(match.type === 'number') {
+      setDisplay(prevState => {
+        console.log(prevState);
+        return prevState === 0 || (prevKey === 'operator' && prevState === firstNumber) ? match.value : `${prevState}${match.value}`
+      })
+    }
+    
+    if(match.type === 'clear') {
+      setDisplay(0);
+      firstNumber = undefined;
+      secondNumber = undefined;
+      operator = undefined;
+      prevKey = undefined;
+    }
   }
-
-  const clear = () => {
-    setDisplay(start);
+  
+  const calculate = (firstNumber, secondNumber, operator) => {
+    firstNumber = parseFloat(firstNumber);
+    secondNumber = parseFloat(secondNumber);
+    if(operator === 'add') return firstNumber + secondNumber;
+    if(operator === 'subtract') return firstNumber - secondNumber;
+    if(operator === 'multiply') return firstNumber * secondNumber;
+    if(operator === 'divide') return firstNumber / secondNumber;
   }
 
   return (
@@ -49,8 +67,7 @@ function App() {
           number={display}
         />
         <Calc 
-          number={display} 
-          handleKey={handleKey} 
+          handleKey={handleKeyed} 
           keyData={keyData}
         />
       </div>

@@ -2,11 +2,12 @@ import React from 'react';
 import '../scss/layout/Calc.scss';
 import Keys from './Keys';
 
-const Calc = ({number, handleKey, keyData}) => {
-  
+const Calc = ({handleKey, keyData}) => {
 
   return (
-    <div className="Calc">
+    <div 
+      className="Calc"
+      >
       <Keys 
         handleKey={handleKey}
         keyData={keyData}
